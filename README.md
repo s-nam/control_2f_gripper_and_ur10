@@ -22,17 +22,17 @@ A ROS-noetic package to control Robotiq 2F gripper and UR10 (CB series)
 
 ## 3. Running a Python code
 Open 6 windows in Terminal, and execute the following commands in turn.
-```console
+```consol
 (Window#1)$ roscore
 ```
-```console
+```consol
 (Window#2)$ rosrun robotiq_2f_gripper_control Robotiq2FGripperRtuNode.py /dev/ttyUSB0
 ```
-```console
+```consol
 (Window#3)$ roslaunch ur_robot_driver ur10_bringup.launch
 ```
 Go to the teach pandent of UR10, load "ExternalControl.urp" on the teach pandent, and click `play` button. Then, you should double-check the following meassage in the terminal, such as
-```console
+```consol
 (Window#3)$ ...
 ...
 [INFO] [1673442528.019679]: Started controllers: joint_state_controller, scaled_pos_joint_traj_controller, speed_scaling_state_controller, force_torque_sensor_controller
@@ -41,18 +41,18 @@ Go to the teach pandent of UR10, load "ExternalControl.urp" on the teach pandent
 [ INFO] [1673442534.723437911]: Robot connected to reverse interface. Ready to receive control commands.
 ```
 
-```console
+```consol
 (Window#4)$ roslaunch ur10_moveit_config moveit_planning_execution.launch
 ```
 
-```console
+```consol
 (Window#5)$ roslaunch ur10_moveit_config moveit_rviz.launch rviz_config:=$(rospack find ur10_moveit_config)/launch/moveit.rviz
 ```
 Please make sure that RViz presents similar robot posture to that of the real UR10.
 
 > Important!! Before running the following Python code, please double check the values of joint angles in the code.
 
-```console
+```consol
 (Windows#6)$ rosrun control_2f_gripper_and_ur10 gripper_ur10_demo.py
 ```
 
@@ -60,7 +60,7 @@ Please make sure that RViz presents similar robot posture to that of the real UR
 ## 4. Issue - Gripper is not working
 Currently, please run the following code first and run the section 3 again.
 
-```console
+```consol
 $ rosrun robotiq_2f_gripper_control Robotiq2FGripperSimpleController.py
 ```
 
