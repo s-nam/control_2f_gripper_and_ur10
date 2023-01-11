@@ -8,16 +8,27 @@ def gripper_ready():
     rospy.loginfo("Initialize the gripper...")
     rospy.loginfo("Step 1: Reset")
     command = outputMsg.Robotiq2FGripper_robot_output()
+    
+    # Generate command
+    # command = genCommand(askForCommand(command), command)
     command.rACT = 0
-    rospy.sleep(0.1)
+    command.rGTO = 0
+    command.rATR = 0
+    command.rPR = 0
+    command.rSP = 0
+    command.rFR = 0
+    rospy.sleep(1)
 
+    return command
+
+def gripper_activate(command):
     rospy.loginfo("Step 2: Activate")
+    
     command.rACT = 1 # Activate
     command.rGTO = 1 # Calls for movement
     command.rSP = 127 # Desired speed
     command.rFR = 127 # Desired force
-
-    rospy.sleep(0.1)
+    rospy.sleep(1)
 
     return command
 
@@ -54,12 +65,17 @@ def publisher():
     # Initialize the gripper
     command_gripper_ready = gripper_ready()
     pub.publish(command_gripper_ready)
+    
+    command_gripper_activate = gripper_activate(command_gripper_ready)
+    pub.publish(command_gripper_activate)
+
     rospy.loginfo("Initialization is successful")
     rospy.loginfo("==================================")
-    rospy.sleep(0.5)
+    rospy.sleep(3)
 
     # Open the gripper
-    command_open = gripper_open(command_gripper_ready)
+    command_open = gripper_open(command_gripper_activate)
+    rospy.sleep(3)
     pub.publish(command_open)
     rospy.loginfo("Opening the gripper is successful")
     rospy.loginfo("==================================")
@@ -69,7 +85,8 @@ def publisher():
 
 
     # Grasp an object (val (0-255) 0: full open, 255: full close)
-    command_grasp = gripper_grasp(120, command_gripper_ready)
+    command_grasp = gripper_grasp(120, command_gripper_activate)
+    rospy.sleep(3)
     pub.publish(command_grasp)
     rospy.loginfo("The gripper grasped an object")
     rospy.sleep(0.5)
@@ -78,7 +95,7 @@ def publisher():
     
 
     # Open the gripper
-    command_open = gripper_open(command_gripper_ready)
+    command_open = gripper_open(command_gripper_activate)
     pub.publish(command_open)
     rospy.loginfo("Opening the gripper is successful")
     rospy.loginfo("==================================")

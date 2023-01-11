@@ -20,7 +20,7 @@ import random
 GROUP_NAME_ARM = "manipulator"
 FIXED_FRAME = 'world'
 
-JOINT_HOME = (math.radians(107.18), math.radians(-73.03), math.radians(120.64), math.radians(-138.37), math.radians(-90.02), math.radians(288.48))
+JOINT_HOME = (math.radians(104.87), math.radians(-85.68), math.radians(115.27), math.radians(-121.23), math.radians(-90.03), math.radians(288.47))
 
 class UR10_move():
 
@@ -70,12 +70,12 @@ class UR10_move():
           
         self.robot_arm.set_named_target("home")  # go to goal state. tool exchange state
         joint_goal = self.robot_arm.get_current_joint_values()
-        joint_goal[0] = math.radians(107.18)
-        joint_goal[1] = math.radians(-73.03)
-        joint_goal[2] = math.radians(120.64)
-        joint_goal[3] = math.radians(-138.37)
-        joint_goal[4] = math.radians(-90.02)
-        joint_goal[5] = math.radians(288.48)
+        joint_goal[0] = math.radians(104.87)
+        joint_goal[1] = math.radians(-85.68)
+        joint_goal[2] = math.radians(115.27)
+        joint_goal[3] = math.radians(-121.23)
+        joint_goal[4] = math.radians(-90.03)
+        joint_goal[5] = math.radians(288.47)
         
         self.robot_arm.go(joint_goal, wait=True)
         print("====== move plan go to home (tool exchange) ======") 
@@ -96,7 +96,7 @@ class UR10_move():
 
         joint_goal = self.robot_arm.get_current_joint_values()
         joint_goal[0] = math.radians(107.18)
-        joint_goal[1] = math.radians(-73.03)
+        joint_goal[1] = math.radians(-72.50)
         joint_goal[2] = math.radians(120.64)
         joint_goal[3] = math.radians(-138.37)
         joint_goal[4] = math.radians(-90.02)
@@ -105,7 +105,7 @@ class UR10_move():
 
         joint_goal = self.robot_arm.get_current_joint_values()
         joint_goal[0] = math.radians(82.75)
-        joint_goal[1] = math.radians(-96.58)
+        joint_goal[1] = math.radians(-106.58)
         joint_goal[2] = math.radians(116.78)
         joint_goal[3] = math.radians(-110.76)
         joint_goal[4] = math.radians(-89.46)
@@ -273,7 +273,7 @@ class UR10_move():
         print(f'goal_names = {goal_names}')
         return goal_names
 
-    def move_grip(self):
+    def move_start_point(self):
         joint_goal = self.poses()
         goal = joint_goal.get('waypoint_1')
         print(f'joint_goal = {goal}')
@@ -283,6 +283,17 @@ class UR10_move():
         # Calling ``stop()`` ensures that there is no residual movement
         self.robot_arm.stop()
         #rospy.sleep(3)
+
+    def move_grip(self):
+        joint_goal = self.poses()
+        #goal = joint_goal.get('waypoint_1')
+        #print(f'joint_goal = {goal}')
+
+        #self.robot_arm.go(goal, wait=True)
+        #print("====== Waypoint 1 done ======")
+        ## Calling ``stop()`` ensures that there is no residual movement
+        #self.robot_arm.stop()
+        ##rospy.sleep(3)
 
         goal = joint_goal.get('waypoint_2')
         print(f'joint_goal = {goal}')
@@ -451,21 +462,34 @@ def gripper_ready():
     rospy.loginfo("Initialize the gripper...")
     rospy.loginfo("Step 1: Reset")
     command = outputMsg.Robotiq2FGripper_robot_output()
+    
+    # Generate command
+    # command = genCommand(askForCommand(command), command)
     command.rACT = 0
-    rospy.sleep(0.1)
-
-    rospy.loginfo("Step 2: Activate")
-    command.rACT = 1 # Activate
-    command.rGTO = 1 # Calls for movement
-    command.rSP = 127 # Desired speed
-    command.rFR = 127 # Desired force
-
-    rospy.sleep(0.1)
+    command.rGTO = 0
+    command.rATR = 0
+    command.rPR = 0
+    command.rSP = 0
+    command.rFR = 0
+    rospy.sleep(1)
 
     return command
 
+
+def gripper_activate(command):
+    rospy.loginfo("Step 2: Activate")
+    
+    command.rACT = 1 # Activate
+    command.rGTO = 1 # Calls for movement
+    command.rSP = 127 # Desired speed
+    command.rFR = 170 # Desired force
+    rospy.sleep(1)
+
+    return command
+
+
 def gripper_grasp(val_int, command):
-    rospy.loginfo("The gripper grasps to the value="+ str(val_int))
+    rospy.loginfo("The gripper grasps to throbot.movee value="+ str(val_int))
     try:
         command.rPR = val_int
         if command.rPR > 255:
@@ -499,32 +523,44 @@ def publisher():
         "Robotiq2FGripperRobotOutput", outputMsg.Robotiq2FGripper_robot_output, queue_size=10
     )
 
+    # Move the robot to a predefined position
+    robot.move_home(JOINT_HOME)
+
     # Initialize the gripper
     command_gripper_ready = gripper_ready()
     pub.publish(command_gripper_ready)
+
+    command_gripper_activate = gripper_activate(command_gripper_ready)
+    pub.publish(command_gripper_activate)
+
     rospy.loginfo("Initialization is successful")
     rospy.loginfo("==================================")
     rospy.sleep(0.5)
 
     # Open the gripper
-    command_open = gripper_open(command_gripper_ready)
+    #command_open = gripper_open(command_gripper_activate)
+    command_open = gripper_grasp(80, command_gripper_activate)
     pub.publish(command_open)
     rospy.loginfo("Opening the gripper is successful")
     rospy.loginfo("==================================")
-    rospy.sleep(0.5)
+    rospy.sleep(1)
 
-    # Move the robot to a predefined position
-    robot.move_home(JOINT_HOME)
+    # Move the robot to the grasping point
+    robot.move_start_point()
+    rospy.sleep(1)
 
     # Grasp an object (val (0-255) 0: full open, 255: full close)
-    command_grasp = gripper_grasp(140, command_gripper_ready)
+    command_grasp = gripper_grasp(120, command_gripper_activate)
     pub.publish(command_grasp)
     rospy.loginfo("The gripper grasped an object")
     rospy.sleep(0.5)
 
     # Move the robot to a predefined position
     robot.move_grip()
-    robot.move_home(JOINT_HOME)
+    rospy.sleep(0.5)
+
+    # Move the robot to the grasping point
+    robot.move_start_point()
 
     # Open the gripper
     command_open = gripper_open(command_gripper_ready)
@@ -532,17 +568,20 @@ def publisher():
     rospy.loginfo("Opening the gripper is successful")
     rospy.loginfo("==================================")
     rospy.sleep(1)
+    
+    robot.move_home(JOINT_HOME)
 
-    while not rospy.is_shutdown():
+    rospy.loginfo("Job is done...")
+    #while not rospy.is_shutdown():
 
-        #command = genCommand(askForCommand(command), command)
+     #   #command = genCommand(askForCommand(command), command)
         
-        #pub.publish(command)
+      #  #pub.publish(command)
 
         
 
-        rospy.sleep(1)
-        rospy.loginfo("test")
+       # rospy.sleep(1)
+       # rospy.loginfo("test")
 
         # Grasping code
         
