@@ -1,0 +1,50 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/softtas2022/catkin_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_planners/chomp/chomp_motion_planner/include/**",
+        "/home/softtas2022/catkin_ws/src/control_2f_gripper_and_ur10/include/**",
+        "/home/softtas2022/catkin_ws/src/Universal_Robots_ROS_Driver/controller_stopper/include/**",
+        "/home/softtas2022/catkin_ws/src/geometric_shapes/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_planners/chomp/chomp_interface/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit_resources/prbt_ikfast_manipulator_plugin/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_ros/benchmarks/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_plugins/moveit_ros_control_interface/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_ros/move_group/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_ros/occupancy_map_monitor/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_ros/robot_interaction/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_ros/moveit_servo/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_setup_assistant/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_plugins/moveit_simple_controller_manager/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit_visual_tools/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_planners/pilz_industrial_motion_planner/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_planners/pilz_industrial_motion_planner_testutils/include/**",
+        "/home/softtas2022/catkin_ws/src/robotiq/robotiq_2f_gripper_action_server/include/**",
+        "/home/softtas2022/catkin_ws/src/robotiq/robotiq_2f_gripper_control/include/**",
+        "/home/softtas2022/catkin_ws/src/robotiq/robotiq_3f_gripper_articulated_gazebo_plugins/include/**",
+        "/home/softtas2022/catkin_ws/src/robotiq/robotiq_3f_gripper_control/include/**",
+        "/home/softtas2022/catkin_ws/src/robotiq/robotiq_ethercat/include/**",
+        "/home/softtas2022/catkin_ws/src/robotiq/robotiq_ft_sensor/include/**",
+        "/home/softtas2022/catkin_ws/src/rviz_visual_tools/include/**",
+        "/home/softtas2022/catkin_ws/src/moveit/moveit_planners/sbpl/core/sbpl_interface/include/**",
+        "/home/softtas2022/catkin_ws/src/srdfdom/include/**",
+        "/home/softtas2022/catkin_ws/src/Universal_Robots_ROS_Driver/ur_calibration/include/**",
+        "/home/softtas2022/catkin_ws/src/universal_robot/ur_kinematics/include/**",
+        "/home/softtas2022/catkin_ws/src/Universal_Robots_ROS_Driver/ur_robot_driver/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
