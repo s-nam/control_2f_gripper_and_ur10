@@ -6,7 +6,7 @@ In `catkin_ws/src` folder,
 ```consol
 $ git clone https://github.com/s-nam/control_2f_gripper_and_ur10.git
 ```
-Next, go to `catkin_ws' folder,
+Next, go to `catkin_ws` folder,
 ```consol
 $ catkin_make
 ```
@@ -50,7 +50,7 @@ Go to the teach pandent of UR10, load "ExternalControl.urp" on the teach pandent
 ```
 Please make sure that RViz presents similar robot posture to that of the real UR10.
 
-    > Important!! Before running the following Python code, please double check the values of joint angles in the code.
+     Important!! Before running the following Python code, please double check the values of joint angles in the code.
 
 ```console
 (Windows#6)$ rosrun control_2f_gripper_and_ur10 gripper_ur10_demo.py
